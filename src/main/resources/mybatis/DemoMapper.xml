@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Demo">
+
+  <resultMap id="DemoMap" type="com.star.springboot.base.bean.Demo" >
+      <result column="id" property="demoId" />
+      <result column="name" property="name" />
+      <result column="age" property="age" />
+  </resultMap>
+  <sql id="baseColumns">
+        id, name, age
+  </sql>
+  <sql id="whereSql">
+      <trim  prefixOverrides="AND | OR">
+        <if test="name != null">
+            AND name LIKE CONCAT('%',#{name},'%')
+        </if>
+      </trim>
+  </sql>
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="demoId"
+          parameterType="com.star.springboot.base.bean.Demo" >
+       insert into Demo
+       <trim prefix="(" suffix=")" suffixOverrides=",">
+           <if test="name != null">
+               name,
+           </if>
+           <if test="age != null">
+               age,
+           </if>
+       </trim>
+       <trim prefix="values (" suffix=")" suffixOverrides=",">
+           <if test="name != null">
+               #{name},
+           </if>
+           <if test="age != null">
+               #{age},
+           </if>
+       </trim>
+  </insert>
+
+  <update id="update" parameterType="com.star.springboot.base.bean.Demo">
+        update Demo set
+        <trim suffixOverrides=",">
+            <if test="name != null">
+                name=#{name},
+            </if>
+            <if test="age != null">
+                age=#{age},
+            </if>
+        </trim>
+        where id=#{demoId}
+    </update>
+
+    <delete id="delete" parameterType="com.star.springboot.base.bean.Demo">
+        delete from Demo
+        <where>
+            id=#{demoId}
+        </where>
+    </delete>
+
+    <select id="get" parameterType="com.star.springboot.base.bean.Demo" resultMap="DemoMap">
+        select <include refid="baseColumns" /> from Demo
+        <where>
+            id=#{demoId}
+        </where>
+        limit 1
+    </select>
+
+    <select id="getList" parameterType="com.star.springboot.base.bean.Demo" resultMap="DemoMap">
+        select <include refid="baseColumns" /> from Demo
+        <where>
+            <include refid="whereSql"/>
+        </where>
+    </select>
+
+    <select id="getListWithPage" parameterType="map" resultMap="DemoMap">
+        select <include refid="baseColumns" /> from Demo
+        <where>
+            <include refid="whereSql"/>
+        </where>
+        <if test="startRow != null and pageSize != null">
+            limit #{startRow}, #{pageSize}
+        </if>
+    </select>
+
+    <select id="count" parameterType="com.star.springboot.base.bean.Demo" resultType="java.lang.Long">
+        select count(*) c from Demo
+        <where>
+            <include refid="whereSql"/>
+        </where>
+    </select>
+
+</mapper>
