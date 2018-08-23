@@ -5,7 +5,7 @@
 
 <mapper namespace="Demo">
 
-  <resultMap id="DemoMap" type="com.star.springboot.base.bean.Demo" >
+  <resultMap id="DemoMap" type="com.star.springboot.bpm.activiti.bean.Demo" >
       <result column="id" property="demoId" />
       <result column="name" property="name" />
       <result column="age" property="age" />
@@ -22,7 +22,7 @@
   </sql>
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="demoId"
-          parameterType="com.star.springboot.base.bean.Demo" >
+          parameterType="com.star.springboot.bpm.activiti.bean.Demo" >
        insert into Demo
        <trim prefix="(" suffix=")" suffixOverrides=",">
            <if test="name != null">
@@ -42,7 +42,7 @@
        </trim>
   </insert>
 
-  <update id="update" parameterType="com.star.springboot.base.bean.Demo">
+  <update id="update" parameterType="com.star.springboot.bpm.activiti.bean.Demo">
         update Demo set
         <trim suffixOverrides=",">
             <if test="name != null">
@@ -55,14 +55,14 @@
         where id=#{demoId}
     </update>
 
-    <delete id="delete" parameterType="com.star.springboot.base.bean.Demo">
+    <delete id="delete" parameterType="com.star.springboot.bpm.activiti.bean.Demo">
         delete from Demo
         <where>
             id=#{demoId}
         </where>
     </delete>
 
-    <select id="get" parameterType="com.star.springboot.base.bean.Demo" resultMap="DemoMap">
+    <select id="get" parameterType="com.star.springboot.bpm.activiti.bean.Demo" resultMap="DemoMap">
         select <include refid="baseColumns" /> from Demo
         <where>
             id=#{demoId}
@@ -70,7 +70,7 @@
         limit 1
     </select>
 
-    <select id="getList" parameterType="com.star.springboot.base.bean.Demo" resultMap="DemoMap">
+    <select id="getList" parameterType="com.star.springboot.bpm.activiti.bean.Demo" resultMap="DemoMap">
         select <include refid="baseColumns" /> from Demo
         <where>
             <include refid="whereSql"/>
@@ -87,7 +87,7 @@
         </if>
     </select>
 
-    <select id="count" parameterType="com.star.springboot.base.bean.Demo" resultType="java.lang.Long">
+    <select id="count" parameterType="com.star.springboot.bpm.activiti.bean.Demo" resultType="java.lang.Long">
         select count(*) c from Demo
         <where>
             <include refid="whereSql"/>
